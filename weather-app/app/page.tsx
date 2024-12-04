@@ -442,6 +442,43 @@ const Home = () => {
   //   }
   // };
 
+  // const fetchWeather = async (location: string) => {
+  //   try {
+  //     const geoUrl = /^\d{5}(?:[-\s]\d{4})?$/.test(location)
+  //       ? `https://api.openweathermap.org/geo/1.0/zip?zip=${location},US&appid=${API_KEY}`
+  //       : `https://api.openweathermap.org/geo/1.0/direct?q=${location}&limit=1&appid=${API_KEY}`;
+  
+  //     const geoResponse = await axios.get(geoUrl);
+  //     const { lat, lon, name, state } = geoResponse.data?.[0] || geoResponse.data;
+  
+  //     if (!lat || !lon) {
+  //       alert("Location not found. Please try again.");
+  //       return;
+  //     }
+  
+  //     const formattedLocation = `${name || location}, ${state || ""}`;
+  
+  //     const currentWeatherResponse = await axios.get(
+  //       `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=imperial`
+  //     );
+  //     setCurrentWeather({
+  //       ...currentWeatherResponse.data,
+  //       displayName: formattedLocation,
+  //     });
+  
+  //     const forecastResponse = await axios.get(
+  //       `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=imperial`
+  //     );
+  //     const filteredForecast = forecastResponse.data.list.filter(
+  //       (_: Forecast, index: number) => index % 8 === 0
+  //     );
+  //     setForecast(filteredForecast);
+  //   } catch (err) {
+  //     console.error("Error fetching weather data:", err);
+  //   }
+  // };
+  
+
   const fetchWeather = async (location: string) => {
     try {
       const geoUrl = /^\d{5}(?:[-\s]\d{4})?$/.test(location)
@@ -473,12 +510,13 @@ const Home = () => {
         (_: Forecast, index: number) => index % 8 === 0
       );
       setForecast(filteredForecast);
-    } catch (err) {
-      console.error("Error fetching weather data:", err);
+    } catch (_) {
+      // Ignore the unused variable
+      console.error("Error fetching weather data");
     }
   };
   
-  
+
 
   const getCurrentLocation = async () => {
     if (!navigator.geolocation) {
