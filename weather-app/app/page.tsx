@@ -406,22 +406,58 @@ const Home = () => {
     setLoading(false);
   };
 
+  // const fetchWeather = async (location: string) => {
+  //   try {
+  //     const geoUrl = /^\d{5}(?:[-\s]\d{4})?$/.test(location)
+  //       ? `https://api.openweathermap.org/geo/1.0/zip?zip=${location},US&appid=${API_KEY}`
+  //       : `https://api.openweathermap.org/geo/1.0/direct?q=${location}&limit=1&appid=${API_KEY}`;
+
+  //     const geoResponse = await axios.get(geoUrl);
+  //     const { lat, lon, name, state } = geoResponse.data?.[0] || geoResponse.data;
+
+  //     if (!lat || !lon) {
+  //       alert("Location not found. Please try again.");
+  //       return;
+  //     }
+
+  //     const formattedLocation = `${name || location}, ${state || ""}`;
+
+  //     const currentWeatherResponse = await axios.get(
+  //       `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=imperial`
+  //     );
+  //     setCurrentWeather({
+  //       ...currentWeatherResponse.data,
+  //       displayName: formattedLocation,
+  //     });
+
+  //     const forecastResponse = await axios.get(
+  //       `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=imperial`
+  //     );
+  //     const filteredForecast = forecastResponse.data.list.filter(
+  //       (_: Forecast, index: number) => index % 8 === 0
+  //     );
+  //     setForecast(filteredForecast);
+  //   } catch (error) {
+  //     console.error("Error fetching weather data:", error);
+  //   }
+  // };
+
   const fetchWeather = async (location: string) => {
     try {
       const geoUrl = /^\d{5}(?:[-\s]\d{4})?$/.test(location)
         ? `https://api.openweathermap.org/geo/1.0/zip?zip=${location},US&appid=${API_KEY}`
         : `https://api.openweathermap.org/geo/1.0/direct?q=${location}&limit=1&appid=${API_KEY}`;
-
+  
       const geoResponse = await axios.get(geoUrl);
       const { lat, lon, name, state } = geoResponse.data?.[0] || geoResponse.data;
-
+  
       if (!lat || !lon) {
         alert("Location not found. Please try again.");
         return;
       }
-
+  
       const formattedLocation = `${name || location}, ${state || ""}`;
-
+  
       const currentWeatherResponse = await axios.get(
         `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=imperial`
       );
@@ -429,7 +465,7 @@ const Home = () => {
         ...currentWeatherResponse.data,
         displayName: formattedLocation,
       });
-
+  
       const forecastResponse = await axios.get(
         `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=imperial`
       );
@@ -437,10 +473,12 @@ const Home = () => {
         (_: Forecast, index: number) => index % 8 === 0
       );
       setForecast(filteredForecast);
-    } catch (error) {
-      console.error("Error fetching weather data:", error);
+    } catch (err) {
+      console.error("Error fetching weather data:", err);
     }
   };
+  
+  
 
   const getCurrentLocation = async () => {
     if (!navigator.geolocation) {
@@ -467,86 +505,6 @@ const Home = () => {
       }
     );
   };
-
-//   return (
-//     <div className="min-h-screen bg-gray-100 p-4">
-//       <h1 className="text-2xl font-bold mb-4 text-center">
-//         Weather App
-//       </h1>
-
-//       <div className="flex items-center mb-4 gap-2">
-//         <input
-//           type="text"
-//           value={city}
-//           onChange={(e) => setCity(e.target.value)}
-//           className="border border-gray-400 p-2 rounded-md flex-1"
-//           placeholder="Enter a city or zip code..."
-//         />
-//         <button
-//           onClick={handleSearch}
-//           className="bg-blue-500 text-white px-4 py-2 rounded-md"
-//         >
-//           Search
-//         </button>
-//         <button
-//           onClick={getCurrentLocation}
-//           className="bg-green-500 text-white px-4 py-2 rounded-md flex items-center"
-//         >
-//           <FaLocationArrow />
-//         </button>
-//       </div>
-
-//       {loading && <LoadingText />}
-
-//       {currentWeather && (
-//         <div className="p-4 border rounded-md bg-white shadow-md mb-4">
-//           <h2 className="text-lg font-bold">
-//             Today&apos;s current weather in {currentWeather.displayName}:
-//           </h2>
-//           <div className="flex items-center gap-4">
-//             <Image
-//               src={`https://openweathermap.org/img/wn/${currentWeather.weather[0].icon}@2x.png`}
-//               alt={currentWeather.weather[0].description}
-//               width={50}
-//               height={50}
-//             />
-//             <p>{currentWeather.weather[0].description}</p>
-//             <p>{currentWeather.main.temp}°F</p>
-//             <p>Wind: {currentWeather.wind.speed} mph</p>
-//           </div>
-//         </div>
-//       )}
-
-//       {forecast.length > 0 && (
-//         <div className="p-4 border rounded-md bg-white shadow-md">
-//           <h2 className="text-lg font-bold">5-Day Forecast:</h2>
-//           <div className="grid grid-cols-2 gap-4 md:grid-cols-5">
-//             {forecast.map((day, index) => (
-//               <div
-//                 key={index}
-//                 className="border p-2 rounded-md flex flex-col items-center bg-gray-50 shadow-sm"
-//               >
-//                 <p className="font-bold">{day.dt_txt.split(" ")[0]}</p>
-//                 <Image
-//                   src={`https://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png`}
-//                   alt={day.weather[0].description}
-//                   width={50}
-//                   height={50}
-//                 />
-//                 <p>{day.weather[0].description}</p>
-//                 <p>{day.main.temp}°F</p>
-//                 <p>Humidity: {day.main.humidity}%</p>
-//                 <p>Wind: {day.wind.speed} mph</p>
-//               </div>
-//             ))}
-//           </div>
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default Home;
 
 
 return (
