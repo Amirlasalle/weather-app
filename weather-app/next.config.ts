@@ -2,7 +2,13 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
-    domains: ['openweathermap.org'], // Allow images from openweathermap.org
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'openweathermap.org',
+        pathname: '/**', // Match all paths under the domain
+      },
+    ],
   },
 };
 
