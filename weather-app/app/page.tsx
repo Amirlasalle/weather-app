@@ -183,7 +183,7 @@ const Home = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4">
+    <div className="w-full flex flex-col items-center justify-start min-h-screen bg-gray-100 p-4 overflow-x-hidden">
       <header className="w-full flex items-center justify-center text-center bg-blue-500 text-white py-4 rounded-xl">
         <span className="text-2xl font-bold text-yellow-400">
           <IoSunny />
