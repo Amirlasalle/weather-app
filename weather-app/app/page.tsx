@@ -1,7 +1,5 @@
 "use client";
-
 import { useState, useEffect } from "react";
-import axios from "axios";
 import { FaLocationArrow } from "react-icons/fa";
 import Image from "next/image";
 import { IoCloudy, IoRainy, IoSnow, IoSunny } from "react-icons/io5";
@@ -10,10 +8,11 @@ import LoadingText from "./components/LoadingText";
 
 // const API_KEY = process.env.NEXT_PUBLIC_API_KEY;
 const API_KEY = "8900debc433c038db6f38ffdd6df8280";
+
 interface CurrentWeather {
   displayName: string;
   weather: { description: string; icon: string }[];
-  main: { temp: number };
+  main: { temp: number, feels_like: number };
   wind: { speed: number };
 }
 
@@ -51,69 +50,6 @@ const Home = () => {
     setCity("");
     setLoading(false);
   };
-
-  // const fetchWeather = async (location: string) => {
-  //   try {
-  //     const geoUrl = /^\d{5}(?:[-\s]\d{4})?$/.test(location)
-  //       ? `https://api.openweathermap.org/geo/1.0/zip?zip=${location},US&appid=${API_KEY}`
-  //       : `https://api.openweathermap.org/geo/1.0/direct?q=${location}&limit=1&appid=${API_KEY}`;
-
-  //     const geoResponse = await axios.get(geoUrl);
-  //     const { lat, lon, name, state } = geoResponse.data?.[0] || geoResponse.data;
-
-  //     if (!lat || !lon) {
-  //       alert("Location not found. Please try again.");
-  //       return;
-  //     }
-
-  //     const formattedLocation = `${name || location}, ${state || ""}`;
-
-  //     const currentWeatherResponse = await axios.get(
-  //       `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=imperial`
-  //     );
-  //     setCurrentWeather({
-  //       ...currentWeatherResponse.data,
-  //       displayName: formattedLocation,
-  //     });
-
-  //     const forecastResponse = await axios.get(
-  //       `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=imperial`
-  //     );
-  //     const filteredForecast = forecastResponse.data.list.filter(
-  //       (_: Forecast, index: number) => index % 8 === 0
-  //     );
-  //     setForecast(filteredForecast);
-  //   } catch (err) {
-  //     console.error("Error fetching weather data:", err);
-  //     alert("Error fetching weather data. Please try again later.");
-  //   }
-  // };
-
-  // const getCurrentLocation = async () => {
-  //   if (!navigator.geolocation) {
-  //     alert("Geolocation is not supported by your browser.");
-  //     return;
-  //   }
-  //   setLoading(true);
-
-  //   navigator.geolocation.getCurrentPosition(
-  //     async (position) => {
-  //       const { latitude, longitude } = position.coords;
-
-  //       const geoResponse = await axios.get(
-  //         `https://api.openweathermap.org/geo/1.0/reverse?lat=${latitude}&lon=${longitude}&limit=1&appid=${API_KEY}`
-  //       );
-
-  //       const locationName = geoResponse.data?.[0]?.name;
-  //       await fetchWeather(locationName || `${latitude},${longitude}`);
-  //       setLoading(false);
-  //     },
-  //     (error) => {
-  //       alert("Unable to retrieve location.");
-  //       setLoading(false);
-  //     }
-  //   );
-  // };
 
   const fetchWeather = async (location: string) => {
     try {
@@ -296,6 +232,7 @@ const Home = () => {
                       {currentWeather.weather[0].description}
                     </p>
                     <p>Temperature: {Math.floor(currentWeather.main.temp)}°F</p>
+                    <p>Feels Like: {Math.floor(currentWeather.main.feels_like)}°F</p>
                     <p>Weather: {currentWeather.weather[0].description}</p>
                     <p>
                       Wind Speed: {Math.floor(currentWeather.wind.speed)} mph
